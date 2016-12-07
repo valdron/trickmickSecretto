@@ -30,31 +30,15 @@ public class start {
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 3;
 		shell.setLayout(gridLayout);
-		ToolBar toolbar = new ToolBar(shell, SWT.NONE);
-		ToolItem itemBack = new ToolItem(toolbar, SWT.PUSH);
-		itemBack.setText("Back");
-		ToolItem itemForward = new ToolItem(toolbar, SWT.PUSH);
-		itemForward.setText("Forward");
-		ToolItem itemStop = new ToolItem(toolbar, SWT.PUSH);
-		itemStop.setText("Stop");
-		ToolItem itemRefresh = new ToolItem(toolbar, SWT.PUSH);
-		itemRefresh.setText("Refresh");
-		ToolItem itemGo = new ToolItem(toolbar, SWT.PUSH);
-		itemGo.setText("Go");
 
 		GridData data = new GridData();
 		data.horizontalSpan = 3;
-		toolbar.setLayoutData(data);
 
-		Label labelAddress = new Label(shell, SWT.NONE);
-		labelAddress.setText("Address");
 
-		final Text location = new Text(shell, SWT.BORDER);
 		data = new GridData();
 		data.horizontalAlignment = GridData.FILL;
 		data.horizontalSpan = 2;
 		data.grabExcessHorizontalSpace = true;
-		location.setLayoutData(data);
 
 		final Browser browser;
 		try {
@@ -83,15 +67,7 @@ public class start {
 		progressBar.setLayoutData(data);
 
 		/* event handling */
-		Listener listener = event -> {
-			ToolItem item = (ToolItem)event.widget;
-			String string = item.getText();
-			if (string.equals("Back")) browser.back();
-			else if (string.equals("Forward")) browser.forward();
-			else if (string.equals("Stop")) browser.stop();
-			else if (string.equals("Refresh")) browser.refresh();
-			else if (string.equals("Go")) browser.setUrl(location.getText());
-   };
+
 		browser.addProgressListener(new ProgressListener() {
 			@Override
 			public void changed(ProgressEvent event) {
@@ -105,24 +81,9 @@ public class start {
 			}
 		});
 		browser.addStatusTextListener(event -> status.setText(event.text));
-		browser.addLocationListener(new LocationListener() {
-			@Override
-			public void changed(LocationEvent event) {
-				if (event.top) location.setText(event.location);
-			}
-			@Override
-			public void changing(LocationEvent event) {
-			}
-		});
-		itemBack.addListener(SWT.Selection, listener);
-		itemForward.addListener(SWT.Selection, listener);
-		itemStop.addListener(SWT.Selection, listener);
-		itemRefresh.addListener(SWT.Selection, listener);
-		itemGo.addListener(SWT.Selection, listener);
-		location.addListener(SWT.DefaultSelection, e -> browser.setUrl(location.getText()));
 
 		shell.open();
-		browser.setUrl("http://eclipse.org");
+		browser.setUrl("http://facebook.com");
 
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
